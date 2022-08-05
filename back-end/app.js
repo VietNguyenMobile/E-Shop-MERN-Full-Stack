@@ -3,35 +3,38 @@ const app = express();
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 require("dotenv/config");
 
-// http://localhost:3000/api/v1/products
+app.use(cors());
+app.options("*", cors());
 
 // Middleware
-app.use(express.json());
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
+
+// Routes
+const productsRoutes = require("./routers/products");
+const ordersRoutes = require("./routers/orders");
+const usersRoutes = require("./routers/users");
+const categoriesRoutes = require("./routers/categories");
 
 const api = process.env.API_URL;
 const PORT = 3000;
 const URL = `http://localhost:${PORT}`;
 
-app.get(`${api}/products`, (req, res) => {
-  // res.send("Hello API");
-  const product = {
-    id: 1,
-    name: "Nike 222",
-    image: "some_url",
-  };
-  res.send(product);
-});
+// Routers
+app.use(`${api}/products`, productsRoutes);
+app.use(`${api}/users`, usersRoutes);
+app.use(`${api}/categories`, categoriesRoutes);
+app.use(`${api}/orders`, ordersRoutes);
 
-app.post(`${api}/products`, (req, res) => {
-  const newProduct = req.body;
-  console.log("newProduct: ", newProduct);
-  res.send(newProduct);
-});
+// Models
+const Product = require("./models/product");
+const Order = require("./models/order");
+const Category = require("./models/category");
+const User = require("./models/user");
 
 const userName = "eshop-user";
 const password = "fgSXK$A7NwE82cT";
@@ -53,6 +56,5 @@ mongoose
   });
 
 app.listen(PORT, () => {
-  // console.log("api: ", api);
   console.log("Server is running ", URL);
 });
