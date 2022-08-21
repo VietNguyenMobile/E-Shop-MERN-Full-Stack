@@ -38,6 +38,10 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Category Id");
+  }
+
   Category.findByIdAndRemove(req.params.id)
     .then((category) => {
       if (category) {
@@ -56,6 +60,10 @@ router.delete("/:id", (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Category Id");
+  }
+
   const category = await Category.findByIdAndUpdate(req.params.id, {
     name: req.body.name,
     icon: req.body.icon,
