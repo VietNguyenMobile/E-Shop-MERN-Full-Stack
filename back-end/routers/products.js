@@ -5,7 +5,14 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 router.get(`/`, async (req, res) => {
-  const productList = await Product.find().populate("category");
+  // http://localhost:3000/api/v1/products?categories=6300d1162c69485bf1aa1782
+  let filter = {};
+
+  if (req.query.categories) {
+    filter = { categories: req.query.categories.split(",") };
+  }
+
+  const productList = await Product.find(filter).populate("category");
 
   if (!productList) {
     res.status(500).json({ success: false });
@@ -127,6 +134,19 @@ router.get("/get/count", async (req, res) => {
   }
 
   res.send({ productCount: productCount });
+});
+
+router.get("/get/featured/:count", async (req, res) => {
+  const count = req.params.count ? req.params.count : 0;
+  const productsFeatured = await Product.find({ isFeatured: true }).limit(
+    +count
+  );
+
+  if (!productsFeatured) {
+    res.status(500).json({ success: false });
+  }
+
+  res.send(productsFeatured);
 });
 
 module.exports = router;
