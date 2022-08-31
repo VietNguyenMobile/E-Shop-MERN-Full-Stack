@@ -13,7 +13,7 @@ async function isRevoked(req, payload) {
   }
   // done();
   // return payload !== "undefined";
-}
+} 
 
 function authJwt() {
   const secret = process.env.secret;
