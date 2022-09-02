@@ -56,6 +56,21 @@ router.post(`/`, async (req, res) => {
 
   // console.log("orderItemsIdsResolved: ", orderItemsIdsResolved);
 
+  const totalPrices = await Promise.all(
+    orderItemsIdsResolved.map(async (orderItemId) => {
+      const orderItem = await OrderItem.findById(orderItemId).populate(
+        "product",
+        "price"
+      );
+      const totalPriceItem = orderItem.product.price * orderItem.quantity;
+      return totalPriceItem;
+    })
+  );
+
+  console.log("totalPrices: ", totalPrices);
+
+  const totalPrice = totalPrices.reduce((a, b) => a + b, 0);
+
   let order = new Order({
     orderItems: orderItemsIdsResolved,
     shippingAddress1: req.body.shippingAddress1,
@@ -65,7 +80,7 @@ router.post(`/`, async (req, res) => {
     country: req.body.country,
     phone: req.body.phone,
     status: req.body.status,
-    totalPrice: req.body.totalPrice,
+    totalPrice: totalPrice,
     user: req.body.user,
   });
 
@@ -82,8 +97,12 @@ router.delete("/:id", (req, res) => {
   }
 
   Order.findByIdAndRemove(req.params.id)
-    .then((order) => {
+    .then(async (order) => {
       if (order) {
+        await order.orderItems.map(async (orderItem) => {
+          await OrderItem.findByIdAndRemove(orderItem);
+        });
+
         return res
           .status(200)
           .json({ success: true, message: "the order is deleted!" });
@@ -114,6 +133,52 @@ router.put("/:id", async (req, res) => {
   if (!order) return res.status(401).send("the order cannot be update!");
 
   res.send(order);
+});
+
+router.get("/get/totalsales", async (req, res) => {
+  const totalSales = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalSales: {
+          $sum: "$totalPrice",
+        },
+      },
+    },
+  ]);
+
+  if (!totalSales) {
+    return res.status(400).send("The order sales cannot be generated");
+  }
+
+  res.send({ totalSales: totalSales.pop().totalSales });
+});
+
+router.get("/get/count", async (req, res) => {
+  const orderCount = await Order.countDocuments();
+
+  if (!orderCount) {
+    res.status(500).json({ success: false });
+  }
+
+  res.send({ orderCount: orderCount });
+});
+
+router.get("/get/userorders/:userId", async (req, res) => {
+  const userOrderList = await Order.find({ user: req.params.userId })
+    .populate({
+      path: "orderItems",
+      populate: {
+        path: "product",
+        populate: "category",
+      },
+    })
+    .sort({ dateOrdered: -1 });
+
+  if (!userOrderList) {
+    res.status(500).json({ success: false });
+  }
+  res.send(userOrderList);
 });
 
 module.exports = router;
