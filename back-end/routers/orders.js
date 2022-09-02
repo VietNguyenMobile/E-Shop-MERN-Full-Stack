@@ -2,14 +2,37 @@ const { Order } = require("../models/order");
 const { OrderItem } = require("../models/order-item");
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
-  const orderList = await Order.find();
+  const orderList = await Order.find()
+    .populate("user", "name")
+    .sort({ dateOrdered: -1 });
 
   if (!orderList) {
     res.status(500).json({ success: false });
   }
   res.send(orderList);
+});
+
+router.get("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Order Id");
+  }
+  const order = await Order.findById(req.params.id)
+    .populate("user", "name")
+    .populate({
+      path: "orderItems",
+      populate: {
+        path: "product",
+        populate: "category",
+      },
+    });
+
+  if (!order) {
+    res.status(500).json({ success: false });
+  }
+  res.send(order);
 });
 
 router.post(`/`, async (req, res) => {
@@ -49,6 +72,46 @@ router.post(`/`, async (req, res) => {
   order = await order.save();
 
   if (!order) return res.status(400).send("the order cannot be created!");
+
+  res.send(order);
+});
+
+router.delete("/:id", (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Order Id");
+  }
+
+  Order.findByIdAndRemove(req.params.id)
+    .then((order) => {
+      if (order) {
+        return res
+          .status(200)
+          .json({ success: true, message: "the order is deleted!" });
+      } else {
+        return res
+          .status(404)
+          .json({ success: false, message: "the order not found!" });
+      }
+    })
+    .catch((err) => {
+      return res.status(400).json({ success: false, error: err });
+    });
+});
+
+router.put("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).send("Invalid Order Id");
+  }
+
+  const order = await Order.findByIdAndUpdate(
+    req.params.id,
+    {
+      status: req.body.status,
+    },
+    { new: true }
+  );
+
+  if (!order) return res.status(401).send("the order cannot be update!");
 
   res.send(order);
 });
