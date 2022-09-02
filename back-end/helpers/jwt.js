@@ -30,6 +30,7 @@ function authJwt() {
       { url: /\/api\/v1\/users(.*)/, methods: ["POST", "GET", "OPTIONS"] },
       `${api}/users/login`,
       `${api}/users/register`,
+      { url: /public\/uploads(.*)/, methods: ["GET", "OPTIONS"] },
     ],
   });
 }
