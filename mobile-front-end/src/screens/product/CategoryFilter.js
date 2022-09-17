@@ -3,12 +3,19 @@ import { StyleSheet, TouchableOpacity, ScrollView, View } from 'react-native';
 import { ListItem, Badge, Text } from 'native-base';
 
 const CategoryFilter = props => {
+  // console.log('categories: ', props.categories);
   return (
     <ScrollView
       bounces={true}
       horizontal={true}
       style={{ backgroundColor: '#f2f2f2' }}>
-      <View style={{ margin: 0, padding: 0, borderRadius: 0 }}>
+      <View
+        style={{
+          margin: 0,
+          padding: 0,
+          borderRadius: 0,
+          flexDirection: 'row',
+        }}>
         <TouchableOpacity
           key={1}
           onPress={() => {

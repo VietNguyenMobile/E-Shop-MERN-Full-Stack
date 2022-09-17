@@ -13,11 +13,11 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     alignItems: 'center',
-    margin: 10,,
+    margin: 10,
   },
   text: {
-    color: 'red',,
-  },,
+    color: 'red',
+  },
 });
 
 export default Error;

@@ -1,7 +1,7 @@
 import React from 'react';
-import {ScrollView, Dimensions, StyleSheet, Text} from 'react-native';
+import { ScrollView, Dimensions, StyleSheet, Text } from 'react-native';
 
-var {width} = Dimensions.get('window');
+var { width } = Dimensions.get('window');
 
 const FormContainer = props => {
   return (
@@ -9,7 +9,7 @@ const FormContainer = props => {
       <Text style={styles.title}>{props.title}</Text>
       {props.children}
     </ScrollView>
-  );;
+  );
 };
 
 const styles = StyleSheet.create({
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-  },,
+  },
 });
 
 export default FormContainer;

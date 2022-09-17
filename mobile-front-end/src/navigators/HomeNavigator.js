@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/stack';
 
 import ProductScreen from '../screens/product/product-screen';
-// import SingleProduct from '../Screens/Products/SingleProduct';
+import SingleProduct from '../screens/product/SingleProduct';
 
 const Stack = createStackNavigator();
 
@@ -25,13 +25,13 @@ function MyStack() {
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="ProductDetail"
         component={SingleProduct}
         options={{
           headerShown: true,
         }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 }

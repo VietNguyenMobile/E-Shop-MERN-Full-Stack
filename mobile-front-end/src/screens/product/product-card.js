@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import EasyButton from '../../shared/StyledComponents/EasyButton';
-// import {connect} from 'react-redux';
-// import * as actions from '../../Redux/Actions/cartActions';
+import { connect } from 'react-redux';
+import * as actions from '../../Redux/Actions/cartActions';
 
 var { width } = Dimensions.get('window');
 
@@ -58,12 +58,12 @@ const ProductCard = props => {
   );
 };
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     addItemToCart: product =>
-//       dispatch(actions.addToCart({quantity: 1, product})),,
-//   };;
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    addItemToCart: product =>
+      dispatch(actions.addToCart({ quantity: 1, product })),
+  };
+};
 
 const styles = StyleSheet.create({
   container: {

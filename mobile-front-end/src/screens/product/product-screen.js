@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import data from '../../assets/data/products.json';
+import productionCategories from '../../assets/data/categories.json';
 import ProductItem from './product-item';
 import {
   Container,
@@ -44,6 +45,9 @@ const ProductScreen = props => {
       setFocus(false);
       setActive(-1);
       setProductsCtg(data);
+      setInitialState(data);
+      setProductsFiltered(data);
+      setCategories(productionCategories);
 
       return () => {
         setProducts([]);
