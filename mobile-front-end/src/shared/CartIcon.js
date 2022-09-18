@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Badge, Text } from 'native-base';
+import { StyleSheet, View, Text } from 'react-native';
+// import { Badge, Text } from 'native-base';
 
 import { connect } from 'react-redux';
 
@@ -8,9 +8,9 @@ const CartIcon = props => {
   return (
     <>
       {props.cartItems.length ? (
-        <Badge style={styles.badge}>
+        <View style={styles.badge}>
           <Text style={styles.text}>{props.cartItems.length}</Text>
-        </Badge>
+        </View>
       ) : null}
     </>
   );

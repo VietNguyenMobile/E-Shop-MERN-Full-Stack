@@ -12,13 +12,14 @@ import Toast from 'react-native-toast-message';
 import EasyButton from '../../shared/StyledComponents/EasyButton';
 import TrafficLight from '../../shared/StyledComponents/TrafficLight';
 
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from '../../Redux/Actions/cartActions';
 
 const SingleProduct = props => {
   const [item, setItem] = useState(props.route.params.item);
   const [availability, setAvailability] = useState(null);
   const [availabilityText, setAvailabilityText] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (props.route.params.item.countInStock == 0) {
@@ -38,8 +39,10 @@ const SingleProduct = props => {
     };
   }, []);
 
+  // console.log('item: ', item);
+
   return (
-    <Container style={styles.container}>
+    <View style={styles.container}>
       <ScrollView style={{ marginBottom: 80, padding: 5 }}>
         <View>
           <Image
@@ -53,7 +56,7 @@ const SingleProduct = props => {
           />
         </View>
         <View style={styles.contentContainer}>
-          <H1 style={styles.contentHeader}>{item.name}</H1>
+          <Text style={styles.contentHeader}>{item.name}</Text>
           <Text style={styles.contentText}>{item.brand}</Text>
         </View>
         <View style={styles.availabilityContainer}>
@@ -68,15 +71,18 @@ const SingleProduct = props => {
       </ScrollView>
 
       <View style={styles.bottomContainer}>
-        <Left>
+        <View>
           <Text style={styles.price}>$ {item.price}</Text>
-        </Left>
-        <Right>
+        </View>
+        <View>
           <EasyButton
             primary
             medium
             onPress={() => {
-              props.addItemToCart(item.id),
+              dispatch(
+                actions.addToCart({ quantity: 1, product: item._id.$oid }),
+              ),
+                // .addItemToCart(item.id),
                 Toast.show({
                   topOffset: 60,
                   type: 'success',
@@ -86,9 +92,9 @@ const SingleProduct = props => {
             }}>
             <Text style={{ color: 'white' }}>Add</Text>
           </EasyButton>
-        </Right>
+        </View>
       </View>
-    </Container>
+    </View>
   );
 };
 
@@ -133,6 +139,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     backgroundColor: 'white',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   price: {
     fontSize: 24,
@@ -149,4 +158,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, mapToDispatchToProps)(SingleProduct);
+// export default connect(null, mapToDispatchToProps)(SingleProduct);
+export default SingleProduct;

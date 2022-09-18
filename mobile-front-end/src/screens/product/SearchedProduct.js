@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, Image, Pressable } from 'react-native';
 import {
   Content,
   Left,
@@ -18,9 +18,9 @@ const SearchedProduct = props => {
     <View style={{ width: width }}>
       {productsFiltered.length > 0 ? (
         productsFiltered.map(item => (
-          <View
+          <Pressable
             onPress={() => {
-              props.navigation.navigate('Product Detail', { item: item });
+              props.navigation.navigate('ProductDetail', { item: item });
             }}
             key={item._id.$oid}
             style={{ flexDirection: 'row', margin: 10 }}
@@ -42,7 +42,7 @@ const SearchedProduct = props => {
                 {item.description}
               </Text>
             </View>
-          </View>
+          </Pressable>
         ))
       ) : (
         <View style={styles.center}>

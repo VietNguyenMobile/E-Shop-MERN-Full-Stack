@@ -12,7 +12,7 @@ const ProductItem = props => {
       style={{ width: '50%', backgroundColor: 'white' }}
       activeOpacity={0.9}
       onPress={() => {
-        // props.navigation.navigate('Product Detail', { item: item })
+        props.navigation.navigate('ProductDetail', { item: item });
       }}>
       <View style={{ width: width / 2, backgroundColor: 'gainsboro' }}>
         <ProductCard {...item} />

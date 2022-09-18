@@ -39,6 +39,7 @@ const ProductScreen = props => {
   const [active, setActive] = useState();
   const [initialState, setInitialState] = useState([]);
   const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,6 +58,42 @@ const ProductScreen = props => {
         setActive();
         setInitialState();
       };
+
+      // setFocus(false);
+      // setActive(-1);
+
+      // // Products
+      // axios
+      //   .get(`${baseURL}products`)
+      //   .then(res => {
+      //     setProducts(res.data);
+      //     setProductsFiltered(res.data);
+      //     setProductsCtg(res.data);
+      //     setInitialState(res.data);
+      //     setLoading(false);
+      //   })
+      //   .catch(error => {
+      //     console.log('Api call error');
+      //   });
+
+      // // Categories
+      // axios
+      //   .get(`${baseURL}categories`)
+      //   .then(res => {
+      //     setCategories(res.data);
+      //   })
+      //   .catch(error => {
+      //     console.log('Api call error');
+      //   });
+
+      // return () => {
+      //   setProducts([]);
+      //   setProductsFiltered([]);
+      //   setFocus();
+      //   setCategories([]);
+      //   setActive();
+      //   setInitialState();
+      // };
     }, []),
   );
 
@@ -163,9 +200,9 @@ const ProductScreen = props => {
       ) : (
         // Loading
         <NativeBaseProvider>
-          <Container style={[styles.center, { backgroundColor: '#f2f2f2' }]}>
+          <View style={[styles.center, { backgroundColor: '#f2f2f2' }]}>
             <ActivityIndicator size="large" color="red" />
-          </Container>
+          </View>
         </NativeBaseProvider>
       )}
     </>
@@ -178,6 +215,18 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
     flexWrap: 'wrap',
     backgroundColor: 'gainsboro',
+  },
+  listContainer: {
+    height: height,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    backgroundColor: 'gainsboro',
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

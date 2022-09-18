@@ -36,7 +36,7 @@ const Payment = props => {
   const [selected, setSelected] = useState();
   const [card, setCard] = useState();
   return (
-    <Container>
+    <View>
       <Header>
         <Body>
           <Title>Choose your payment method</Title>
@@ -76,7 +76,7 @@ const Payment = props => {
           />
         </View>
       </Content>
-    </Container>
+    </View>
   );
 };
 

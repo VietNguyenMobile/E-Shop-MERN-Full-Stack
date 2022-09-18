@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import EasyButton from '../../shared/StyledComponents/EasyButton';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from '../../Redux/Actions/cartActions';
 
 var { width } = Dimensions.get('window');
@@ -17,6 +17,8 @@ var { width } = Dimensions.get('window');
 const ProductCard = props => {
   const { name, price, image, countInStock } = props;
 
+  // console.log('ProductCard props: ', props);
+  const dispatch = useDispatch();
   return (
     <View style={styles.container}>
       <Image
@@ -40,7 +42,10 @@ const ProductCard = props => {
             primary
             medium
             onPress={() => {
-              props.addItemToCart(props.id),
+              // props.addItemToCart(props.id),
+              dispatch(
+                actions.addToCart({ quantity: 1, product: props._id.$oid }),
+              ),
                 Toast.show({
                   topOffset: 60,
                   type: 'success',
